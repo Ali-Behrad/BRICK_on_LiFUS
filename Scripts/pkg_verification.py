@@ -1,8 +1,3 @@
-"""
-Confirms that every required package for the BRICK project imports correctly.
-Run this after setting up your virtual environment and installing requirements.txt.
-"""
-
 import importlib
 
 packages = [

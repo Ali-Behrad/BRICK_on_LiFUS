@@ -1,40 +1,11 @@
-"""
-Build the data audit table for rs-fMRI/timeseries.
-
-Final table columns (in this order):
-  Subject ID | Condition | Format | Dimensions | TR | Timepoints | Notes
-
-Notes:
-  - Condition is derived by checking which of the two expected fields
-    (target_meants_pre / target_meants_post) exist inside each .mat file:
-    "Pre/Post", "Pre", "Post", or "None found".
-  - Dimensions and Timepoints are derived from the shapes of those same
-    fields (whichever are present).
-  - TR is set to "NA" for every row, since it cannot be derived from these
-    files -- it must come from the paper's Supplementary Information or
-    the scanner protocol.
-  - Target (VIM/ZI) is recorded in the Notes column, not as its own column.
-
-Filename pattern expected: sub-fuspd01_ses-2_roi-vim_meants.mat
-
-USAGE:
-  1. Update TIMESERIES_DIR to point to your local copy of rs-fMRI/timeseries
-  2. Confirm TARGET_PRE_KEY / TARGET_POST_KEY match your actual field names
-     (run inspect_one_file() on a sample file first if unsure)
-  3. Run: python build_audit_table.py
-  4. Check audit_table.csv for the result
-"""
-
 import os
 import re
 import glob
 import scipy.io as sio
 import pandas as pd
 
-# ---- CONFIG: update this path to your local copy ----
 TIMESERIES_DIR = "../Data/rsfMRI/timeseries"
 
-# Best-guess field names -- confirm these against your actual files
 TARGET_PRE_KEY = "target_meants_pre"
 TARGET_POST_KEY = "target_meants_post"
 
@@ -44,7 +15,6 @@ FNAME_PATTERN = re.compile(
 
 
 def inspect_one_file(filepath):
-    """Utility: print all fields/shapes in a single file to confirm key names."""
     data = sio.loadmat(filepath)
     print(f"\n--- {filepath} ---")
     for k, v in data.items():
@@ -54,8 +24,6 @@ def inspect_one_file(filepath):
 
 
 def get_condition(data):
-    """Return 'Pre/Post', 'Pre', 'Post', or 'None found' based on which
-    fields are actually present in the loaded .mat file."""
     has_pre = TARGET_PRE_KEY in data
     has_post = TARGET_POST_KEY in data
 
@@ -74,8 +42,6 @@ def get_shape(array):
 
 
 def get_timepoints(array):
-    """Number of timepoints = largest dimension of the array
-    (handles both row and column vector orientations)."""
     shape = get_shape(array)
     if not shape:
         return None
@@ -83,11 +49,6 @@ def get_timepoints(array):
 
 
 def get_dimensions_and_timepoints(data):
-    """Return (Dimensions string, Timepoints string) built from whichever
-    of the pre/post fields are present, e.g.
-    Dimensions: 'Pre: (1, 210), Post: (1, 205)'
-    Timepoints: 'Pre: 210, Post: 205'
-    """
     dim_parts = []
     tp_parts = []
 
@@ -160,7 +121,6 @@ def build_table(timeseries_dir):
 
 
 def check_completeness(df):
-    """Flag any row missing pre or post data, based on the Condition column."""
     issues = []
     for _, r in df.iterrows():
         if r["Condition"] in (None, "Pre", "Post", "None found"):
