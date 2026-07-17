@@ -12,7 +12,6 @@ This project applies **BRICK** (BRain dynamics Identification using Control and 
 
 Data are from Vuong, Sreenivasan et al. (2026), *"Low-intensity transcranial ultrasound effects on the ventral intermediate nucleus and zona incerta in Parkinson's disease tremor,"* Brain Stimulation, and are publicly available on [OSF](https://osf.io/fhqwd/overview). The dataset consists of ROI-averaged resting-state BOLD time series (VIM and ZI targets, 22 additional cerebello-thalamo-cortical ROIs) collected pre- and post-TUS in 19 PD participants.
 
-See [`docs/data_audit.md`](docs/data_audit.md) for the full data audit table and known gaps.
 
 ## Project structure
 
