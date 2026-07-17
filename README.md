@@ -16,14 +16,14 @@ Data are from Vuong, Sreenivasan et al. (2026), *"Low-intensity transcranial ult
 ## Project structure
 
 ```
-├── data/            # Raw and processed fMRI data (not tracked in git)
+├── data/            # Raw and processed fMRI data (the OSF dataset, link included)
 ├── preprocessing/   # Scripts for cleaning, parcellation, formatting time series
 ├── models/          # BRICK architecture: Koopman linearization, spatio-temporal encoder, control module
 ├── training/        # Training loops, configs, checkpoints
 ├── analysis/        # Statistical comparison of latent modes, pre/post effects
 ├── results/         # Figures, tables, model outputs (not tracked in git)
+├── scripts/         # Scripts of general purpose tasks like filename parsing and data overview
 ├── tests/           # Unit tests (pytest)
 ├── requirements.txt
-├── test_imports.py  # Verifies environment setup
 └── README.md
 ```
